@@ -522,6 +522,24 @@
             width: 100%;
         }
 
+        .btn-teal-custom {
+            background: linear-gradient(135deg, var(--teal), #2dd4bf);
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
         .btn-outline {
             background: white;
             color: var(--primary);
@@ -1391,6 +1409,14 @@
             font-family: 'Poppins', 'Noto Sans Bengali', sans-serif;
         }
 
+        /* Attendance Report PDF */
+        #attendance-report-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            font-family: 'Poppins', 'Noto Sans Bengali', sans-serif;
+        }
+
         /* Responsive */
         @media (min-width: 768px) {
             .main-content {
@@ -1457,6 +1483,76 @@
             color: var(--gray);
             font-style: italic;
             font-size: 0.8rem;
+        }
+
+        /* Orientation Options */
+        .orientation-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .orientation-option {
+            flex: 1;
+            padding: 16px 12px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .orientation-option:hover {
+            border-color: var(--primary);
+        }
+
+        .orientation-option.selected {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .orientation-option i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .orientation-option span {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--dark);
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            background: var(--gray-light);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-bar-fill.excellent {
+            background: linear-gradient(90deg, var(--success), #34d399);
+        }
+
+        .progress-bar-fill.good {
+            background: linear-gradient(90deg, var(--teal), #2dd4bf);
+        }
+
+        .progress-bar-fill.average {
+            background: linear-gradient(90deg, var(--warning), #fbbf24);
+        }
+
+        .progress-bar-fill.poor {
+            background: linear-gradient(90deg, var(--danger), #f87171);
         }
     </style>
 </head>
@@ -1702,7 +1798,7 @@
 
         <!-- Action Buttons -->
         <div class="action-grid" id="routineActions" style="display: none;">
-            <button class="btn-success-custom" onclick="downloadPDF()">
+            <button class="btn-success-custom" onclick="openPDFOptionsModal()">
                 <i class="fas fa-download"></i>
                 Download PDF
             </button>
@@ -1752,6 +1848,18 @@
                     Import
                 </button>
             </div>
+        </div>
+
+        <!-- Attendance Report Section -->
+        <div class="export-import-section">
+            <div class="export-import-title">
+                <i class="fas fa-chart-bar"></i>
+                Attendance Report
+            </div>
+            <button class="btn-teal-custom btn-sm" onclick="openAttendanceReportModal()">
+                <i class="fas fa-file-pdf"></i>
+                Generate Attendance Report
+            </button>
         </div>
 
         <!-- Filter Tabs -->
@@ -1917,6 +2025,96 @@
     </div>
 </div>
 
+<!-- PDF Options Modal -->
+<div class="modal-overlay" id="pdfOptionsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">PDF Download Options</h3>
+            <button class="modal-close" onclick="closeModal('pdfOptionsModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size: 0.8rem; color: var(--gray); margin-bottom: 14px;">
+                <i class="fas fa-info-circle"></i> Choose PDF orientation for best viewing.
+            </p>
+
+            <label class="form-label">Select Orientation</label>
+            <div class="orientation-options">
+                <div class="orientation-option selected" onclick="selectOrientation('landscape', this)" data-orientation="landscape">
+                    <i class="fas fa-desktop"></i>
+                    <span>Landscape</span>
+                </div>
+                <div class="orientation-option" onclick="selectOrientation('portrait', this)" data-orientation="portrait">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Portrait</span>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+                <label class="form-label">PDF Quality</label>
+                <select class="form-select" id="pdfQuality">
+                    <option value="high">High Quality (Recommended)</option>
+                    <option value="ultra">Ultra High Quality</option>
+                    <option value="normal">Normal Quality</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-outline" onclick="closeModal('pdfOptionsModal')">Cancel</button>
+            <button class="btn-success-custom" onclick="downloadPDF()">
+                <i class="fas fa-download"></i> Download
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Attendance Report Modal -->
+<div class="modal-overlay" id="attendanceReportModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Generate Attendance Report</h3>
+            <button class="modal-close" onclick="closeModal('attendanceReportModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size: 0.8rem; color: var(--gray); margin-bottom: 14px;">
+                <i class="fas fa-info-circle"></i> Generate comprehensive attendance report with percentage and classes taken.
+            </p>
+
+            <div class="input-row">
+                <div class="form-group">
+                    <label class="form-label">From Date</label>
+                    <input type="date" class="date-input" id="reportFromDate">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">To Date</label>
+                    <input type="date" class="date-input" id="reportToDate">
+                </div>
+            </div>
+
+            <label class="form-label">Select Orientation</label>
+            <div class="orientation-options">
+                <div class="orientation-option" onclick="selectReportOrientation('landscape', this)" data-orientation="landscape">
+                    <i class="fas fa-desktop"></i>
+                    <span>Landscape</span>
+                </div>
+                <div class="orientation-option selected" onclick="selectReportOrientation('portrait', this)" data-orientation="portrait">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Portrait</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-outline" onclick="closeModal('attendanceReportModal')">Cancel</button>
+            <button class="btn-teal-custom" onclick="generateAttendanceReport()">
+                <i class="fas fa-file-pdf"></i> Generate Report
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Export Modal -->
 <div class="modal-overlay" id="exportModal">
     <div class="modal-content">
@@ -2010,14 +2208,14 @@
 
 <!-- PDF Content (Hidden) -->
 <div id="pdf-content">
-    <div style="text-align: center; border-bottom: 3px solid #4361ee; padding-bottom: 12px; margin-bottom: 12px;">
-        <h1 style="color: #4361ee; font-size: 1.3rem; margin-bottom: 4px;">Rasulpur Primary School</h1>
-        <p style="color: #666; margin: 4px 0; font-size: 0.85rem;">D.El.Ed. Teaching Internship Program</p>
-        <p id="pdfDate" style="font-weight: bold; color: #333; font-size: 0.95rem;"></p>
+    <div style="text-align: center; border-bottom: 3px solid #4361ee; padding-bottom: 15px; margin-bottom: 15px;">
+        <h1 style="color: #4361ee; font-size: 1.5rem; margin-bottom: 5px;">Rasulpur Primary School</h1>
+        <p style="color: #666; margin: 5px 0; font-size: 1rem;">D.El.Ed. Teaching Internship Program</p>
+        <p id="pdfDate" style="font-weight: bold; color: #333; font-size: 1.1rem;"></p>
     </div>
 
-    <div id="pdfMessageSection" style="display: none; background: #f0f9ff; border-left: 4px solid #4361ee; padding: 10px 14px; margin-bottom: 12px; border-radius: 0 8px 8px 0;">
-        <p style="font-size: 0.85rem; color: #1e40af; margin: 0;">
+    <div id="pdfMessageSection" style="display: none; background: #f0f9ff; border-left: 4px solid #4361ee; padding: 12px 16px; margin-bottom: 15px; border-radius: 0 8px 8px 0;">
+        <p style="font-size: 1rem; color: #1e40af; margin: 0;">
             <strong>📢 Notice:</strong>
             <span id="pdfMessageText"></span>
         </p>
@@ -2025,23 +2223,45 @@
 
     <div id="pdfTableContent"></div>
 
-    <div style="margin-top: 16px; padding-top: 12px; border-top: 2px solid #eee;">
-        <p style="font-size: 10px; margin-bottom: 6px;">
+    <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid #eee;">
+        <p style="font-size: 11px; margin-bottom: 8px;">
             <strong style="color: #10b981;">✓ Present:</strong>
             <span id="pdfPresentTeachers"></span>
         </p>
-        <p style="font-size: 10px; color: #666; margin-bottom: 6px;">
+        <p style="font-size: 11px; color: #666; margin-bottom: 8px;">
             <strong style="color: #ef4444;">✗ Absent:</strong>
             <span id="pdfAbsentTeachers"></span>
         </p>
-        <p id="pdfSpecialTeachersSection" style="font-size: 10px; color: #c2410c; display: none;">
+        <p id="pdfSpecialTeachersSection" style="font-size: 11px; color: #c2410c; display: none;">
             <strong>★ Special Teachers:</strong>
             <span id="pdfSpecialTeachers"></span>
         </p>
     </div>
 
-    <div style="margin-top: 16px; text-align: center; padding-top: 12px; border-top: 1px dashed #ddd;">
-        <p style="font-size: 9px; color: #999;">Generated on <span id="pdfGeneratedDate"></span></p>
+    <div style="margin-top: 20px; text-align: center; padding-top: 15px; border-top: 1px dashed #ddd;">
+        <p style="font-size: 10px; color: #999;">Generated on <span id="pdfGeneratedDate"></span></p>
+    </div>
+</div>
+
+<!-- Attendance Report Content (Hidden) -->
+<div id="attendance-report-content">
+    <div style="text-align: center; border-bottom: 3px solid #14b8a6; padding-bottom: 15px; margin-bottom: 20px;">
+        <h1 style="color: #14b8a6; font-size: 1.5rem; margin-bottom: 5px;">Rasulpur Primary School</h1>
+        <p style="color: #666; margin: 5px 0; font-size: 1rem;">D.El.Ed. Teaching Internship Program</p>
+        <h2 style="color: #333; font-size: 1.2rem; margin-top: 10px;">Attendance Report</h2>
+        <p id="reportDateRange" style="font-weight: 600; color: #14b8a6; font-size: 1rem;"></p>
+    </div>
+
+    <div id="reportSummary" style="background: #f0fdfa; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+        <!-- Summary will be inserted here -->
+    </div>
+
+    <div id="reportTableContent">
+        <!-- Table will be inserted here -->
+    </div>
+
+    <div style="margin-top: 25px; text-align: center; padding-top: 15px; border-top: 1px dashed #ddd;">
+        <p style="font-size: 10px; color: #999;">Generated on <span id="reportGeneratedDate"></span></p>
     </div>
 </div>
 
@@ -2078,6 +2298,8 @@
     let tempEditedSubjects = {};
     let tempSpecialTeachers = [];
     let currentFilter = 'all';
+    let selectedPdfOrientation = 'landscape';
+    let selectedReportOrientation = 'portrait';
 
     // =====================
     // UTILITY FUNCTIONS
@@ -2921,9 +3143,40 @@
     }
 
     // =====================
-    // PDF GENERATION
+    // PDF OPTIONS & GENERATION
     // =====================
+    function selectOrientation(orientation, element) {
+        selectedPdfOrientation = orientation;
+        document.querySelectorAll('#pdfOptionsModal .orientation-option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        element.classList.add('selected');
+    }
+
+    function selectReportOrientation(orientation, element) {
+        selectedReportOrientation = orientation;
+        document.querySelectorAll('#attendanceReportModal .orientation-option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        element.classList.add('selected');
+    }
+
+    function openPDFOptionsModal() {
+        // Reset to default
+        selectedPdfOrientation = 'landscape';
+        document.querySelectorAll('#pdfOptionsModal .orientation-option').forEach(opt => {
+            opt.classList.remove('selected');
+            if (opt.dataset.orientation === 'landscape') {
+                opt.classList.add('selected');
+            }
+        });
+        document.getElementById('pdfQuality').value = 'high';
+        openModal('pdfOptionsModal');
+    }
+
     function downloadPDF() {
+        closeModal('pdfOptionsModal');
+
         const date = document.getElementById('routineDate').value;
         if (!date) {
             showToast('Please select a date', 'error');
@@ -2963,12 +3216,18 @@
             msgSection.style.display = 'none';
         }
 
+        // Adjust font sizes based on orientation
+        const isLandscape = selectedPdfOrientation === 'landscape';
+        const tableFontSize = isLandscape ? '11px' : '9px';
+        const subjectFontSize = isLandscape ? '12px' : '10px';
+        const teacherFontSize = isLandscape ? '10px' : '8px';
+
         let tableHTML = `
-                <table style="width: 100%; border-collapse: collapse; font-size: 9px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: ${tableFontSize};">
                     <thead>
                         <tr style="background: linear-gradient(135deg, #4361ee, #4895ef); color: white;">
-                            <th style="padding: 8px; border: 1px solid #ddd; vertical-align: middle;">Period</th>
-                            ${CLASSES.map(c => `<th style="padding: 8px; border: 1px solid #ddd; vertical-align: middle;">${c}</th>`).join('')}
+                            <th style="padding: 10px; border: 1px solid #ddd; vertical-align: middle;">Period</th>
+                            ${CLASSES.map(c => `<th style="padding: 10px; border: 1px solid #ddd; vertical-align: middle;">${c}</th>`).join('')}
                         </tr>
                     </thead>
                     <tbody>
@@ -2978,7 +3237,7 @@
 
         for (let p = 1; p <= periods; p++) {
             tableHTML += `<tr>
-                    <td style="padding: 6px; border: 1px solid #ddd; background: #4361ee; color: white; text-align: center; vertical-align: middle; font-weight: bold;">${p}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; background: #4361ee; color: white; text-align: center; vertical-align: middle; font-weight: bold;">${p}</td>
                 `;
 
             CLASSES.forEach((_, i) => {
@@ -2990,12 +3249,12 @@
                 const isSpecial = teacher?.isSpecial;
 
                 if (isNoClass) {
-                    tableHTML += `<td style="padding: 6px; border: 1px solid #ddd; text-align: center; vertical-align: middle; background: #f5f5f5; color: #999; font-style: italic;">No Class</td>`;
+                    tableHTML += `<td style="padding: 8px; border: 1px solid #ddd; text-align: center; vertical-align: middle; background: #f5f5f5; color: #999; font-style: italic;">No Class</td>`;
                 } else {
                     tableHTML += `
-                            <td style="padding: 6px; border: 1px solid #ddd; text-align: center; vertical-align: middle;">
-                                <strong style="font-family: 'Noto Sans Bengali', sans-serif;">${subject}</strong><br>
-                                <span style="color: ${isSpecial ? '#c2410c' : '#4361ee'}; font-size: 8px;">${teacher ? (isSpecial ? '★ ' : '') + teacher.name : '---'}</span>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: center; vertical-align: middle;">
+                                <strong style="font-family: 'Noto Sans Bengali', sans-serif; font-size: ${subjectFontSize};">${subject}</strong><br>
+                                <span style="color: ${isSpecial ? '#c2410c' : '#4361ee'}; font-size: ${teacherFontSize};">${teacher ? (isSpecial ? '★ ' : '') + teacher.name : '---'}</span>
                             </td>
                         `;
                 }
@@ -3027,22 +3286,260 @@
 
         pdfContent.style.display = 'block';
 
+        // Get quality settings
+        const quality = document.getElementById('pdfQuality').value;
+        let scale, imageQuality;
+
+        switch(quality) {
+            case 'ultra':
+                scale = 4;
+                imageQuality = 1;
+                break;
+            case 'high':
+                scale = 3;
+                imageQuality = 0.99;
+                break;
+            default:
+                scale = 2;
+                imageQuality = 0.95;
+        }
+
         const opt = {
-            margin: [8, 8, 8, 8],
+            margin: [10, 10, 10, 10],
             filename: `Routine_${date}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            image: { type: 'jpeg', quality: imageQuality },
+            html2canvas: {
+                scale: scale,
+                useCORS: true,
+                logging: false,
+                letterRendering: true,
+                allowTaint: true
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: 'a4',
+                orientation: selectedPdfOrientation
+            }
         };
 
-        showToast('Generating PDF...', 'warning');
+        showToast('Generating high quality PDF...', 'warning');
 
         html2pdf().set(opt).from(pdfContent).save().then(() => {
             pdfContent.style.display = 'none';
-            showToast('PDF downloaded!');
+            showToast('PDF downloaded successfully!');
         }).catch(err => {
             pdfContent.style.display = 'none';
             showToast('Error generating PDF', 'error');
+            console.error(err);
+        });
+    }
+
+    // =====================
+    // ATTENDANCE REPORT
+    // =====================
+    function openAttendanceReportModal() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('reportFromDate').value = today;
+        document.getElementById('reportToDate').value = today;
+
+        // Reset orientation
+        selectedReportOrientation = 'portrait';
+        document.querySelectorAll('#attendanceReportModal .orientation-option').forEach(opt => {
+            opt.classList.remove('selected');
+            if (opt.dataset.orientation === 'portrait') {
+                opt.classList.add('selected');
+            }
+        });
+
+        openModal('attendanceReportModal');
+    }
+
+    function generateAttendanceReport() {
+        const fromDate = document.getElementById('reportFromDate').value;
+        const toDate = document.getElementById('reportToDate').value;
+
+        if (!fromDate || !toDate) {
+            showToast('Please select date range', 'error');
+            return;
+        }
+
+        if (new Date(fromDate) > new Date(toDate)) {
+            showToast('From date must be before To date', 'error');
+            return;
+        }
+
+        closeModal('attendanceReportModal');
+
+        const teachers = getTeachers();
+        if (!teachers.length) {
+            showToast('No teachers found', 'error');
+            return;
+        }
+
+        const dates = getDatesBetween(fromDate, toDate);
+        const holidays = getHolidays();
+        const allRoutines = load(STORAGE.ROUTINES) || {};
+
+        // Calculate working days (excluding Sundays and holidays)
+        const workingDays = dates.filter(date => {
+            const day = new Date(date).getDay();
+            return day !== 0 && !holidays[date];
+        });
+
+        if (!workingDays.length) {
+            showToast('No working days in selected range', 'error');
+            return;
+        }
+
+        // Calculate attendance stats for each teacher
+        const teacherStats = teachers.map(teacher => {
+            let presentDays = 0;
+            let classesTaken = 0;
+
+            workingDays.forEach(date => {
+                const attendance = getAttendance(date);
+                if (attendance[teacher.id] !== false) {
+                    presentDays++;
+                }
+
+                // Count classes taken from routines
+                const routineData = allRoutines[date];
+                if (routineData && routineData.selections) {
+                    Object.values(routineData.selections).forEach(teacherId => {
+                        if (teacherId === teacher.id) {
+                            classesTaken++;
+                        }
+                    });
+                }
+            });
+
+            const percentage = workingDays.length > 0 ?
+                ((presentDays / workingDays.length) * 100).toFixed(1) : 0;
+
+            return {
+                ...teacher,
+                presentDays,
+                absentDays: workingDays.length - presentDays,
+                classesTaken,
+                percentage: parseFloat(percentage)
+            };
+        });
+
+        // Sort by attendance percentage (descending)
+        teacherStats.sort((a, b) => b.percentage - a.percentage);
+
+        // Generate report HTML
+        const reportContent = document.getElementById('attendance-report-content');
+
+        document.getElementById('reportDateRange').textContent =
+            `${formatShortDate(fromDate)} to ${formatShortDate(toDate)}`;
+
+        // Summary section
+        const totalPresent = teacherStats.reduce((sum, t) => sum + t.presentDays, 0);
+        const totalPossible = workingDays.length * teachers.length;
+        const overallPercentage = totalPossible > 0 ?
+            ((totalPresent / totalPossible) * 100).toFixed(1) : 0;
+        const totalClasses = teacherStats.reduce((sum, t) => sum + t.classesTaken, 0);
+
+        document.getElementById('reportSummary').innerHTML = `
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; text-align: center;">
+                <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="font-size: 1.8rem; font-weight: 700; color: #14b8a6;">${workingDays.length}</div>
+                    <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">Working Days</div>
+                </div>
+                <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="font-size: 1.8rem; font-weight: 700; color: #10b981;">${overallPercentage}%</div>
+                    <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">Overall Attendance</div>
+                </div>
+                <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="font-size: 1.8rem; font-weight: 700; color: #4361ee;">${teachers.length}</div>
+                    <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">Total Teachers</div>
+                </div>
+                <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="font-size: 1.8rem; font-weight: 700; color: #8b5cf6;">${totalClasses}</div>
+                    <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">Total Classes Taken</div>
+                </div>
+            </div>
+        `;
+
+        // Table section
+        const settings = getSettings();
+        let tableHTML = `
+            <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 15px;">
+                <thead>
+                    <tr style="background: linear-gradient(135deg, #14b8a6, #2dd4bf); color: white;">
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Rank</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Name</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Year</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Present</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Absent</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Attendance %</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Classes Taken</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        teacherStats.forEach((teacher, index) => {
+            const isGL = settings.gl === teacher.id;
+            const isAGL = settings.agl === teacher.id;
+            const roleText = isGL ? ' (GL)' : (isAGL ? ' (AGL)' : '');
+
+            let percentColor = '#ef4444';
+            if (teacher.percentage >= 90) percentColor = '#10b981';
+            else if (teacher.percentage >= 75) percentColor = '#14b8a6';
+            else if (teacher.percentage >= 50) percentColor = '#f59e0b';
+
+            tableHTML += `
+                <tr style="background: ${index % 2 === 0 ? '#fff' : '#f8fafc'};">
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center; font-weight: 600;">${index + 1}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">
+                        ${teacher.name}${roleText}
+                    </td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${teacher.year}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center; color: #10b981; font-weight: 600;">${teacher.presentDays}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center; color: #ef4444; font-weight: 600;">${teacher.absentDays}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">
+                        <span style="color: ${percentColor}; font-weight: 700;">${teacher.percentage}%</span>
+                    </td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center; color: #8b5cf6; font-weight: 600;">${teacher.classesTaken}</td>
+                </tr>
+            `;
+        });
+
+        tableHTML += '</tbody></table>';
+        document.getElementById('reportTableContent').innerHTML = tableHTML;
+
+        document.getElementById('reportGeneratedDate').textContent = new Date().toLocaleString();
+
+        reportContent.style.display = 'block';
+
+        const opt = {
+            margin: [10, 10, 10, 10],
+            filename: `Attendance_Report_${fromDate}_to_${toDate}.pdf`,
+            image: { type: 'jpeg', quality: 0.99 },
+            html2canvas: {
+                scale: 3,
+                useCORS: true,
+                logging: false,
+                letterRendering: true
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: 'a4',
+                orientation: selectedReportOrientation
+            }
+        };
+
+        showToast('Generating attendance report...', 'warning');
+
+        html2pdf().set(opt).from(reportContent).save().then(() => {
+            reportContent.style.display = 'none';
+            showToast('Attendance report downloaded!');
+        }).catch(err => {
+            reportContent.style.display = 'none';
+            showToast('Error generating report', 'error');
+            console.error(err);
         });
     }
 
