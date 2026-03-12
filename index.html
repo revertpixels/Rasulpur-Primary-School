@@ -1,0 +1,3485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4361ee">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Rasulpur Primary School - Routine Manager</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3651d4;
+            --secondary: #4895ef;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --purple: #8b5cf6;
+            --pink: #ec4899;
+            --orange: #f97316;
+            --teal: #14b8a6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: calc(80px + var(--safe-bottom));
+        }
+
+        .bengali {
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 14px 16px;
+            padding-top: calc(14px + env(safe-area-inset-top, 0px));
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-subtitle {
+            font-size: 0.65rem;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 14px;
+            padding-bottom: 100px;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        /* Cards */
+        .card-custom {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+
+        .card-header-custom {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 12px 14px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-header-custom.warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #fbbf24 100%);
+        }
+
+        .card-header-custom.purple {
+            background: linear-gradient(135deg, var(--purple) 0%, #a78bfa 100%);
+        }
+
+        .card-header-custom.success {
+            background: linear-gradient(135deg, var(--success) 0%, #34d399 100%);
+        }
+
+        .card-header-custom.orange {
+            background: linear-gradient(135deg, var(--orange) 0%, #fb923c 100%);
+        }
+
+        .card-header-custom.teal {
+            background: linear-gradient(135deg, var(--teal) 0%, #2dd4bf 100%);
+        }
+
+        .card-body-custom {
+            padding: 14px;
+        }
+
+        /* Date Picker */
+        .date-picker-container {
+            background: white;
+            border-radius: var(--radius);
+            padding: 14px;
+            box-shadow: var(--shadow);
+            margin-bottom: 14px;
+        }
+
+        .date-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            color: var(--dark);
+            font-size: 0.85rem;
+        }
+
+        .date-input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        /* Date Display Card */
+        .date-display-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 14px;
+            text-align: center;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+        }
+
+        .date-display-card.holiday {
+            background: linear-gradient(135deg, var(--warning) 0%, #fbbf24 100%);
+        }
+
+        .date-display-card .date-text {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .date-display-card .day-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .date-display-card .holiday-reason {
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            display: inline-block;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 12px 8px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 6px;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .stat-icon.total { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+        .stat-icon.present { background: linear-gradient(135deg, var(--success), #34d399); }
+        .stat-icon.absent { background: linear-gradient(135deg, var(--danger), #f87171); }
+
+        .stat-number {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .stat-label {
+            font-size: 0.6rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* List Items */
+        .list-item {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .list-item:active {
+            transform: scale(0.98);
+        }
+
+        .list-item.present {
+            border-left-color: var(--success);
+            background: linear-gradient(90deg, #ecfdf5 0%, white 30%);
+        }
+
+        .list-item.absent {
+            border-left-color: var(--danger);
+            background: linear-gradient(90deg, #fef2f2 0%, white 30%);
+        }
+
+        .list-item.gl {
+            border-left-color: var(--warning);
+            background: linear-gradient(90deg, #fef3c7 0%, white 30%);
+        }
+
+        .list-item.agl {
+            border-left-color: var(--purple);
+            background: linear-gradient(90deg, #f3e8ff 0%, white 30%);
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .item-avatar.present { background: linear-gradient(135deg, var(--success), #34d399); }
+        .item-avatar.absent { background: linear-gradient(135deg, var(--danger), #f87171); }
+        .item-avatar.gl { background: linear-gradient(135deg, var(--warning), #fbbf24); }
+        .item-avatar.agl { background: linear-gradient(135deg, var(--purple), #a78bfa); }
+
+        .designation-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: white;
+            color: var(--dark);
+            font-size: 0.5rem;
+            padding: 1px 4px;
+            border-radius: 4px;
+            font-weight: 700;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .item-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-sub {
+            font-size: 0.65rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .year-badge {
+            background: var(--gray-light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+
+        .role-badge {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+
+        .role-badge.gl {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .role-badge.agl {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+
+        /* Buttons */
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-icon.delete {
+            background: #fef2f2;
+            color: var(--danger);
+        }
+
+        .btn-icon.delete:active {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            width: 100%;
+        }
+
+        .btn-primary-custom:active {
+            transform: scale(0.96);
+        }
+
+        .btn-success-custom {
+            background: linear-gradient(135deg, var(--success), #34d399);
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success-custom:active {
+            transform: scale(0.96);
+        }
+
+        .btn-warning-custom {
+            background: linear-gradient(135deg, var(--warning), #fbbf24);
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-warning-custom:active {
+            transform: scale(0.96);
+        }
+
+        .btn-purple-custom {
+            background: linear-gradient(135deg, var(--purple), #a78bfa);
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-orange-custom {
+            background: linear-gradient(135deg, var(--orange), #fb923c);
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 9px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-outline.danger {
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .btn-outline.danger:active {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 0.75rem;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--danger);
+            border-radius: 26px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        input:checked + .toggle-slider {
+            background: var(--success);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Status Badge */
+        .badge-custom {
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-custom.present {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-custom.absent {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .badge-custom.holiday {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-custom.special {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+        /* Form Inputs */
+        .form-input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-input:disabled {
+            background: var(--gray-light);
+            cursor: not-allowed;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-family: inherit;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 70px;
+            transition: all 0.3s ease;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* Holiday Banner */
+        .holiday-banner {
+            background: linear-gradient(135deg, var(--warning), #fbbf24);
+            color: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-bottom: 14px;
+        }
+
+        .holiday-banner i {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .holiday-banner h3 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .holiday-banner p {
+            opacity: 0.9;
+            font-size: 0.8rem;
+        }
+
+        .holiday-banner .reason {
+            margin-top: 8px;
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 0.8rem;
+        }
+
+        /* Notice Banners */
+        .notice-banner {
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+
+        .notice-banner.saturday {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+        }
+
+        .notice-banner.info {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: #1e40af;
+        }
+
+        .notice-banner.edited {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            color: #7c3aed;
+        }
+
+        .notice-banner.special {
+            background: linear-gradient(135deg, #ffedd5, #fed7aa);
+            color: #c2410c;
+        }
+
+        /* Routine Table */
+        .routine-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -14px;
+            padding: 0 14px 14px;
+        }
+
+        .routine-table {
+            width: 100%;
+            min-width: 620px;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            font-size: 0.7rem;
+        }
+
+        .routine-table th {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 10px 6px;
+            font-weight: 600;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .routine-table td {
+            padding: 8px 5px;
+            text-align: center;
+            vertical-align: middle;
+            background: white;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .period-cell {
+            background: linear-gradient(135deg, var(--primary), #6366f1) !important;
+            color: white;
+            font-weight: 700;
+            min-width: 45px;
+            vertical-align: middle;
+        }
+
+        .subject-cell {
+            position: relative;
+            vertical-align: middle;
+        }
+
+        .subject-name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.7rem;
+            margin-bottom: 4px;
+        }
+
+        .subject-name.edited {
+            color: var(--purple);
+        }
+
+        .subject-edited-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: var(--purple);
+            color: white;
+            border-radius: 50%;
+            font-size: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .teacher-select {
+            width: 100%;
+            padding: 5px 3px;
+            border: 2px solid var(--gray-light);
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-family: inherit;
+            cursor: pointer;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .teacher-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .teacher-select option.special-teacher {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+        .no-class-cell {
+            background: #f8fafc !important;
+            color: var(--gray);
+            font-style: italic;
+            vertical-align: middle;
+        }
+
+        /* Mobile Routine Cards */
+        .routine-cards {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .routine-table-wrapper {
+                display: none;
+            }
+
+            .routine-cards {
+                display: block;
+            }
+
+            .period-card {
+                background: white;
+                border-radius: var(--radius-sm);
+                margin-bottom: 12px;
+                box-shadow: var(--shadow);
+                overflow: hidden;
+            }
+
+            .period-header {
+                background: linear-gradient(135deg, var(--primary), var(--secondary));
+                color: white;
+                padding: 10px 14px;
+                font-weight: 700;
+                font-size: 0.9rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .period-body {
+                padding: 10px 12px;
+            }
+
+            .class-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 8px 0;
+                border-bottom: 1px solid var(--gray-light);
+                gap: 8px;
+            }
+
+            .class-row:last-child {
+                border-bottom: none;
+            }
+
+            .class-info {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .class-name {
+                font-weight: 600;
+                color: var(--dark);
+                font-size: 0.75rem;
+            }
+
+            .class-subject {
+                font-size: 0.7rem;
+                color: var(--gray);
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .class-subject.edited {
+                color: var(--purple);
+            }
+
+            .class-select-wrapper {
+                width: 48%;
+            }
+
+            .class-select {
+                width: 100%;
+                padding: 8px 6px;
+                border: 2px solid var(--gray-light);
+                border-radius: 8px;
+                font-size: 0.75rem;
+                font-family: inherit;
+            }
+
+            .no-class-text {
+                color: var(--gray);
+                font-style: italic;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 25px 15px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .empty-state h4 {
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .empty-state p {
+            font-size: 0.8rem;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 0;
+            padding-bottom: calc(6px + var(--safe-bottom));
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--gray);
+            text-decoration: none;
+            min-width: 55px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+        }
+
+        .nav-item span {
+            font-size: 0.55rem;
+            font-weight: 600;
+        }
+
+        /* History Items */
+        .history-item {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:active {
+            transform: scale(0.98);
+        }
+
+        .history-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .history-date {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.85rem;
+        }
+
+        .history-day {
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+
+        .history-stats {
+            display: flex;
+            gap: 10px;
+            font-size: 0.7rem;
+            flex-wrap: wrap;
+        }
+
+        .history-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .history-stat.present { color: var(--success); }
+        .history-stat.absent { color: var(--danger); }
+        .history-stat.holiday { color: var(--warning); }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 14px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .filter-tab {
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 2px solid var(--gray-light);
+            background: white;
+            color: var(--gray);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 16px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 400px;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 14px;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+
+        .modal-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+
+        .modal-close {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gray-light);
+            color: var(--gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body {
+            padding: 14px;
+        }
+
+        .modal-footer {
+            padding: 14px;
+            border-top: 1px solid var(--gray-light);
+            display: flex;
+            gap: 10px;
+            position: sticky;
+            bottom: 0;
+            background: white;
+        }
+
+        .modal-footer button {
+            flex: 1;
+        }
+
+        /* Collapsible */
+        .collapsible-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: var(--gray-light);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .collapsible-header h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .collapsible-header.active .collapsible-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            display: none;
+            padding: 8px 0;
+        }
+
+        .collapsible-content.active {
+            display: block;
+        }
+
+        /* Special Teacher Item */
+        .special-teacher-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #ffedd5;
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            border-left: 3px solid var(--orange);
+        }
+
+        .special-teacher-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .special-teacher-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--orange), #fb923c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.7rem;
+        }
+
+        .special-teacher-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--dark);
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 60px;
+            left: 12px;
+            right: 12px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            animation: slideDown 0.4s ease;
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        .toast.warning { border-left: 4px solid var(--warning); }
+
+        .toast i { font-size: 1rem; }
+        .toast.success i { color: var(--success); }
+        .toast.error i { color: var(--danger); }
+        .toast.warning i { color: var(--warning); }
+
+        .toast-message {
+            flex: 1;
+            font-size: 0.8rem;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scroll Hint */
+        .scroll-hint {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.65rem;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        /* Action Grid */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .action-grid.cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        /* Export/Import Section */
+        .export-import-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 14px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+        }
+
+        .export-import-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* PDF Content */
+        #pdf-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            font-family: 'Poppins', 'Noto Sans Bengali', sans-serif;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .main-content {
+                max-width: 700px;
+                margin: 0 auto;
+            }
+        }
+
+        /* GL/AGL Section */
+        .gl-agl-section {
+            background: linear-gradient(135deg, #fef3c7 0%, #f3e8ff 100%);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin-bottom: 14px;
+        }
+
+        .gl-agl-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .gl-agl-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .gl-agl-card {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .gl-agl-card.gl {
+            border-top: 3px solid var(--warning);
+        }
+
+        .gl-agl-card.agl {
+            border-top: 3px solid var(--purple);
+        }
+
+        .gl-agl-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+
+        .gl-agl-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--dark);
+        }
+
+        .gl-agl-empty {
+            color: var(--gray);
+            font-style: italic;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- App Header -->
+<header class="app-header">
+    <div class="header-content">
+        <div>
+            <div class="header-title">
+                <i class="fas fa-school"></i>
+                Rasulpur Primary School
+            </div>
+            <div class="header-subtitle">D.El.Ed. Teaching Internship</div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <!-- HOME TAB -->
+    <div id="home-tab" class="tab-content active">
+        <h2 class="section-title">
+            <i class="fas fa-clipboard-check"></i>
+            Daily Attendance
+        </h2>
+
+        <!-- Date Picker -->
+        <div class="date-picker-container">
+            <label class="date-label">Select Date</label>
+            <input type="date" id="attendanceDate" class="date-input" onchange="loadAttendance()">
+        </div>
+
+        <!-- Date Display -->
+        <div class="date-display-card" id="dateDisplayCard">
+            <div class="date-text" id="displayDate">Select a date</div>
+            <div class="day-text" id="displayDay">---</div>
+            <div class="holiday-reason" id="holidayReasonDisplay" style="display: none;"></div>
+        </div>
+
+        <!-- Custom Holiday Banner -->
+        <div id="customHolidayBanner" class="holiday-banner" style="display: none;">
+            <i class="fas fa-calendar-times"></i>
+            <h3>Holiday</h3>
+            <p id="customHolidayText">This day is marked as holiday</p>
+            <div class="reason" id="customHolidayReason"></div>
+            <button class="btn-outline" style="margin-top: 10px; display: inline-flex; border-color: white; color: white;" onclick="removeHoliday()">
+                <i class="fas fa-times"></i> Remove Holiday
+            </button>
+        </div>
+
+        <!-- Sunday Holiday -->
+        <div id="sundayBanner" class="holiday-banner" style="display: none;">
+            <i class="fas fa-umbrella-beach"></i>
+            <h3>Sunday - Weekly Holiday!</h3>
+            <p>School is closed today</p>
+        </div>
+
+        <!-- Mark as Holiday Button -->
+        <div id="markHolidaySection" style="display: none;">
+            <button class="btn-warning-custom" onclick="openHolidayModal()" style="margin-bottom: 14px;">
+                <i class="fas fa-calendar-plus"></i>
+                Mark This Day as Holiday
+            </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon total">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number" id="totalTeachers">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon present">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-number" id="presentCount">0</div>
+                <div class="stat-label">Present</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon absent">
+                    <i class="fas fa-user-times"></i>
+                </div>
+                <div class="stat-number" id="absentCount">0</div>
+                <div class="stat-label">Absent</div>
+            </div>
+        </div>
+
+        <!-- Attendance List -->
+        <div class="card-custom" id="attendanceCard">
+            <div class="card-header-custom">
+                <i class="fas fa-list-check"></i>
+                Mark Attendance
+            </div>
+            <div class="card-body-custom">
+                <div id="attendanceList">
+                    <div class="empty-state">
+                        <i class="fas fa-user-plus"></i>
+                        <h4>No Teachers Added</h4>
+                        <p>Add teachers from "Teachers" tab first</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TEACHERS TAB -->
+    <div id="teachers-tab" class="tab-content">
+        <h2 class="section-title">
+            <i class="fas fa-chalkboard-teacher"></i>
+            All Teachers
+        </h2>
+
+        <!-- GL/AGL Section -->
+        <div class="gl-agl-section">
+            <div class="gl-agl-title">
+                <i class="fas fa-crown"></i>
+                Leadership Roles
+            </div>
+            <div class="gl-agl-grid">
+                <div class="gl-agl-card gl">
+                    <div class="gl-agl-label">Group Leader (GL)</div>
+                    <div class="gl-agl-name" id="glName">
+                        <span class="gl-agl-empty">Not Assigned</span>
+                    </div>
+                </div>
+                <div class="gl-agl-card agl">
+                    <div class="gl-agl-label">Asst. Group Leader (AGL)</div>
+                    <div class="gl-agl-name" id="aglName">
+                        <span class="gl-agl-empty">Not Assigned</span>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-purple-custom btn-sm" style="margin-top: 10px;" onclick="openGLAGLModal()" id="glAglBtn">
+                <i class="fas fa-user-cog"></i>
+                <span id="glAglBtnText">Assign GL & AGL</span>
+            </button>
+        </div>
+
+        <!-- Add Teacher -->
+        <div class="card-custom">
+            <div class="card-header-custom">
+                <i class="fas fa-user-plus"></i>
+                Add New Teacher
+            </div>
+            <div class="card-body-custom">
+                <form id="addTeacherForm">
+                    <div class="form-group">
+                        <label class="form-label">Teacher Name</label>
+                        <input type="text" class="form-input" id="teacherName"
+                               placeholder="Enter full name..." required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Year</label>
+                        <select class="form-select" id="teacherYear" required>
+                            <option value="">Select Year</option>
+                            <option value="1st">1st Year Student</option>
+                            <option value="2nd">2nd Year Student</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary-custom">
+                        <i class="fas fa-plus"></i>
+                        Add Teacher
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Teachers List -->
+        <div class="card-custom">
+            <div class="card-header-custom">
+                <i class="fas fa-users"></i>
+                Teachers List
+                <span style="margin-left: auto; background: rgba(255,255,255,0.2); padding: 2px 10px; border-radius: 20px; font-size: 0.7rem;" id="teacherCount">0</span>
+            </div>
+            <div class="card-body-custom">
+                <div id="teachersList">
+                    <div class="empty-state">
+                        <i class="fas fa-user-slash"></i>
+                        <h4>No Teachers Yet</h4>
+                        <p>Add teachers using the form above</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ROUTINE TAB -->
+    <div id="routine-tab" class="tab-content">
+        <h2 class="section-title">
+            <i class="fas fa-table"></i>
+            Create Routine
+        </h2>
+
+        <!-- Date Selection -->
+        <div class="date-picker-container">
+            <label class="date-label">Select Date for Routine</label>
+            <input type="date" id="routineDate" class="date-input" onchange="generateRoutine()">
+        </div>
+
+        <!-- Holiday Notice for Routine -->
+        <div id="routineHolidayBanner" class="holiday-banner" style="display: none;">
+            <i class="fas fa-calendar-times"></i>
+            <h3 id="routineHolidayTitle">Holiday!</h3>
+            <p id="routineHolidayText">No classes on this day</p>
+        </div>
+
+        <!-- Saturday Notice -->
+        <div id="saturdayNotice" class="notice-banner saturday" style="display: none;">
+            <i class="fas fa-info-circle"></i>
+            Saturday - Only 4 Periods
+        </div>
+
+        <!-- Edited Subjects Notice -->
+        <div id="editedNotice" class="notice-banner edited" style="display: none;">
+            <i class="fas fa-edit"></i>
+            <span>Some subjects temporarily changed</span>
+        </div>
+
+        <!-- Special Teachers Notice -->
+        <div id="specialTeachersNotice" class="notice-banner special" style="display: none;">
+            <i class="fas fa-user-tie"></i>
+            <span id="specialTeachersText">Special teachers added</span>
+        </div>
+
+        <!-- Additional Message -->
+        <div class="card-custom" id="messageCard" style="display: none;">
+            <div class="card-header-custom purple">
+                <i class="fas fa-comment-alt"></i>
+                Additional Message for PDF
+            </div>
+            <div class="card-body-custom">
+                    <textarea class="form-textarea" id="pdfMessage"
+                              placeholder="Enter any message to include in PDF (optional)..."></textarea>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-grid" id="routineActions" style="display: none;">
+            <button class="btn-success-custom" onclick="downloadPDF()">
+                <i class="fas fa-download"></i>
+                Download PDF
+            </button>
+            <button class="btn-purple-custom" onclick="openEditSubjectsModal()">
+                <i class="fas fa-edit"></i>
+                Edit Subjects
+            </button>
+        </div>
+
+        <div class="action-grid" id="routineActions2" style="display: none;">
+            <button class="btn-orange-custom" onclick="openSpecialTeachersModal()" style="grid-column: span 2;">
+                <i class="fas fa-user-plus"></i>
+                Add Special Teacher (School Staff)
+            </button>
+        </div>
+
+        <!-- Routine Container -->
+        <div id="routineContent">
+            <div class="empty-state">
+                <i class="fas fa-calendar-plus"></i>
+                <h4>Select a Date</h4>
+                <p>Choose a date above to create routine</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div id="history-tab" class="tab-content">
+        <h2 class="section-title">
+            <i class="fas fa-history"></i>
+            History
+        </h2>
+
+        <!-- Export/Import Section -->
+        <div class="export-import-section">
+            <div class="export-import-title">
+                <i class="fas fa-exchange-alt"></i>
+                Export / Import Data
+            </div>
+            <div class="action-grid">
+                <button class="btn-success-custom btn-sm" onclick="openExportModal()">
+                    <i class="fas fa-file-export"></i>
+                    Export
+                </button>
+                <button class="btn-primary-custom btn-sm" onclick="openImportModal()">
+                    <i class="fas fa-file-import"></i>
+                    Import
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterHistory('all', this)">All</button>
+            <button class="filter-tab" onclick="filterHistory('attendance', this)">Attendance</button>
+            <button class="filter-tab" onclick="filterHistory('routine', this)">Routines</button>
+            <button class="filter-tab" onclick="filterHistory('holiday', this)">Holidays</button>
+        </div>
+
+        <!-- History List -->
+        <div id="historyList">
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h4>No History Yet</h4>
+                <p>Your records will appear here</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <a class="nav-item active" onclick="showTab('home')" id="nav-home">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a class="nav-item" onclick="showTab('teachers')" id="nav-teachers">
+        <i class="fas fa-users"></i>
+        <span>Teachers</span>
+    </a>
+    <a class="nav-item" onclick="showTab('routine')" id="nav-routine">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Routine</span>
+    </a>
+    <a class="nav-item" onclick="showTab('history')" id="nav-history">
+        <i class="fas fa-history"></i>
+        <span>History</span>
+    </a>
+</nav>
+
+<!-- Holiday Modal -->
+<div class="modal-overlay" id="holidayModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Mark as Holiday</h3>
+            <button class="modal-close" onclick="closeModal('holidayModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Reason for Holiday</label>
+                <input type="text" class="form-input" id="holidayReason"
+                       placeholder="e.g., Puja, School Function...">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-outline" onclick="closeModal('holidayModal')">Cancel</button>
+            <button class="btn-warning-custom" onclick="saveHoliday()">
+                <i class="fas fa-check"></i> Mark Holiday
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- GL/AGL Modal -->
+<div class="modal-overlay" id="glAglModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Assign GL & AGL</h3>
+            <button class="modal-close" onclick="closeModal('glAglModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Group Leader (GL)</label>
+                <select class="form-select" id="selectGL">
+                    <option value="">Select GL</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Assistant Group Leader (AGL)</label>
+                <select class="form-select" id="selectAGL">
+                    <option value="">Select AGL</option>
+                </select>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--gray); margin-top: 10px;">
+                <i class="fas fa-info-circle"></i> GL and AGL cannot be the same person.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-outline" onclick="closeModal('glAglModal')">Cancel</button>
+            <button class="btn-purple-custom" onclick="saveGLAGL()">
+                <i class="fas fa-check"></i> Save
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Subjects Modal -->
+<div class="modal-overlay" id="editSubjectsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Edit Subjects (Temporary)</h3>
+            <button class="modal-close" onclick="closeModal('editSubjectsModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size: 0.8rem; color: var(--gray); margin-bottom: 14px;">
+                <i class="fas fa-info-circle"></i> Changes apply only to this date.
+            </p>
+            <div id="editSubjectsList"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-outline danger" onclick="resetSubjects()">
+                <i class="fas fa-undo"></i> Reset
+            </button>
+            <button class="btn-primary-custom" onclick="saveEditedSubjects()">
+                <i class="fas fa-check"></i> Save
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Special Teachers Modal -->
+<div class="modal-overlay" id="specialTeachersModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Add Special Teacher</h3>
+            <button class="modal-close" onclick="closeModal('specialTeachersModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size: 0.8rem; color: var(--gray); margin-bottom: 14px;">
+                <i class="fas fa-info-circle"></i> Add original school teachers for special classes. They will appear in dropdown only for this day.
+            </p>
+
+            <div class="form-group">
+                <label class="form-label">Teacher Name</label>
+                <input type="text" class="form-input" id="specialTeacherName"
+                       placeholder="Enter school teacher's name...">
+            </div>
+            <button class="btn-orange-custom btn-sm" onclick="addSpecialTeacher()" style="margin-bottom: 14px;">
+                <i class="fas fa-plus"></i> Add Teacher
+            </button>
+
+            <div id="specialTeachersList">
+                <!-- Special teachers will be listed here -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-outline" onclick="clearSpecialTeachers()">
+                <i class="fas fa-trash"></i> Clear All
+            </button>
+            <button class="btn-primary-custom" onclick="closeModal('specialTeachersModal')">
+                <i class="fas fa-check"></i> Done
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Export Modal -->
+<div class="modal-overlay" id="exportModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Export Data</h3>
+            <button class="modal-close" onclick="closeModal('exportModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Export Type</label>
+                <select class="form-select" id="exportType" onchange="updateExportOptions()">
+                    <option value="all">All Data</option>
+                    <option value="date">Specific Date</option>
+                    <option value="range">Date Range</option>
+                </select>
+            </div>
+            <div id="exportDateOptions" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Select Date</label>
+                    <input type="date" class="date-input" id="exportDate">
+                </div>
+            </div>
+            <div id="exportRangeOptions" style="display: none;">
+                <div class="input-row">
+                    <div class="form-group">
+                        <label class="form-label">From</label>
+                        <input type="date" class="date-input" id="exportFrom">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">To</label>
+                        <input type="date" class="date-input" id="exportTo">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-outline" onclick="closeModal('exportModal')">Cancel</button>
+            <button class="btn-success-custom" onclick="exportData()">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Import Modal -->
+<div class="modal-overlay" id="importModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Import Data</h3>
+            <button class="modal-close" onclick="closeModal('importModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size: 0.8rem; color: var(--gray); margin-bottom: 14px;">
+                <i class="fas fa-info-circle"></i> Import data from another device. Existing data for same dates will be merged/overwritten.
+            </p>
+            <div class="form-group">
+                <label class="form-label">Paste Exported Data</label>
+                <textarea class="form-textarea" id="importData"
+                          placeholder="Paste the exported JSON data here..." style="min-height: 120px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Or Upload File</label>
+                <input type="file" class="form-input" id="importFile" accept=".json" onchange="handleFileImport(event)">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-outline" onclick="closeModal('importModal')">Cancel</button>
+            <button class="btn-primary-custom" onclick="importData()">
+                <i class="fas fa-upload"></i> Import
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- History Detail Modal -->
+<div class="modal-overlay" id="historyDetailModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="historyDetailTitle">Details</h3>
+            <button class="modal-close" onclick="closeModal('historyDetailModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body" id="historyDetailContent"></div>
+    </div>
+</div>
+
+<!-- PDF Content (Hidden) -->
+<div id="pdf-content">
+    <div style="text-align: center; border-bottom: 3px solid #4361ee; padding-bottom: 12px; margin-bottom: 12px;">
+        <h1 style="color: #4361ee; font-size: 1.3rem; margin-bottom: 4px;">Rasulpur Primary School</h1>
+        <p style="color: #666; margin: 4px 0; font-size: 0.85rem;">D.El.Ed. Teaching Internship Program</p>
+        <p id="pdfDate" style="font-weight: bold; color: #333; font-size: 0.95rem;"></p>
+    </div>
+
+    <div id="pdfMessageSection" style="display: none; background: #f0f9ff; border-left: 4px solid #4361ee; padding: 10px 14px; margin-bottom: 12px; border-radius: 0 8px 8px 0;">
+        <p style="font-size: 0.85rem; color: #1e40af; margin: 0;">
+            <strong>📢 Notice:</strong>
+            <span id="pdfMessageText"></span>
+        </p>
+    </div>
+
+    <div id="pdfTableContent"></div>
+
+    <div style="margin-top: 16px; padding-top: 12px; border-top: 2px solid #eee;">
+        <p style="font-size: 10px; margin-bottom: 6px;">
+            <strong style="color: #10b981;">✓ Present:</strong>
+            <span id="pdfPresentTeachers"></span>
+        </p>
+        <p style="font-size: 10px; color: #666; margin-bottom: 6px;">
+            <strong style="color: #ef4444;">✗ Absent:</strong>
+            <span id="pdfAbsentTeachers"></span>
+        </p>
+        <p id="pdfSpecialTeachersSection" style="font-size: 10px; color: #c2410c; display: none;">
+            <strong>★ Special Teachers:</strong>
+            <span id="pdfSpecialTeachers"></span>
+        </p>
+    </div>
+
+    <div style="margin-top: 16px; text-align: center; padding-top: 12px; border-top: 1px dashed #ddd;">
+        <p style="font-size: 9px; color: #999;">Generated on <span id="pdfGeneratedDate"></span></p>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+    // =====================
+    // CONSTANTS
+    // =====================
+    const STORAGE = {
+        TEACHERS: 'rps_teachers',
+        ATTENDANCE: 'rps_attendance',
+        ROUTINES: 'rps_routines',
+        HOLIDAYS: 'rps_holidays',
+        EDITED_SUBJECTS: 'rps_edited_subjects',
+        SPECIAL_TEACHERS: 'rps_special_teachers',
+        SETTINGS: 'rps_settings'
+    };
+
+    const ORIGINAL_SUBJECTS = {
+        1: ['মজারু', 'বাংলা', 'বাংলা', 'বাংলা', 'বাংলা', 'গণিত'],
+        2: ['মজারু', 'সহজপাঠ', 'গণিত', 'English', 'English', 'English'],
+        3: ['কুটুম কাটাম', 'English', 'সহজপাঠ', 'পরিবেশ', 'গণিত', 'বাংলা'],
+        4: ['কুটুম কাটাম', 'গণিত', 'সাস্থ্য', 'Wings', 'Wings', 'পরিবেশ'],
+        5: ['No Class', 'সাস্থ্য', 'English', 'গণিত', 'পরিবেশ', 'Wings'],
+        6: ['No Class', 'Music', 'Music', 'সাস্থ্য', 'সাস্থ্য', 'সাস্থ্য']
+    };
+
+    const CLASSES = ['Pre Primary', 'Class I', 'Class II', 'Class III', 'Class IV', 'Class V'];
+    const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    let tempEditedSubjects = {};
+    let tempSpecialTeachers = [];
+    let currentFilter = 'all';
+
+    // =====================
+    // UTILITY FUNCTIONS
+    // =====================
+    const save = (key, data) => localStorage.setItem(key, JSON.stringify(data));
+    const load = (key) => JSON.parse(localStorage.getItem(key) || 'null');
+    const genId = () => Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    const getInitials = (name) => name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+    function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function formatShortDate(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icons = { success: 'check-circle', error: 'exclamation-circle', warning: 'exclamation-triangle' };
+        toast.innerHTML = `
+                <i class="fas fa-${icons[type]}"></i>
+                <span class="toast-message">${message}</span>
+            `;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'slideDown 0.3s ease reverse';
+            setTimeout(() => toast.remove(), 300);
+        }, 2500);
+    }
+
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+
+    // =====================
+    // TAB NAVIGATION
+    // =====================
+    function showTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+        document.getElementById(`nav-${tabName}`).classList.add('active');
+
+        if (tabName === 'home') loadAttendance();
+        else if (tabName === 'teachers') renderTeachers();
+        else if (tabName === 'routine') generateRoutine();
+        else if (tabName === 'history') loadHistory();
+    }
+
+    // =====================
+    // TEACHERS
+    // =====================
+    function getTeachers() {
+        return load(STORAGE.TEACHERS) || [];
+    }
+
+    function getSettings() {
+        return load(STORAGE.SETTINGS) || { gl: null, agl: null };
+    }
+
+    function saveSettings(settings) {
+        save(STORAGE.SETTINGS, settings);
+    }
+
+    function addTeacher(name, year) {
+        const teachers = getTeachers();
+        teachers.push({ id: genId(), name: name.trim(), year, addedOn: new Date().toISOString() });
+        save(STORAGE.TEACHERS, teachers);
+    }
+
+    function deleteTeacher(id) {
+        let teachers = getTeachers().filter(t => t.id !== id);
+        save(STORAGE.TEACHERS, teachers);
+
+        // Remove from GL/AGL if deleted
+        const settings = getSettings();
+        if (settings.gl === id) settings.gl = null;
+        if (settings.agl === id) settings.agl = null;
+        saveSettings(settings);
+    }
+
+    function getTeacherById(id) {
+        return getTeachers().find(t => t.id === id);
+    }
+
+    function renderTeachers() {
+        const teachers = getTeachers();
+        const settings = getSettings();
+        const container = document.getElementById('teachersList');
+        document.getElementById('teacherCount').textContent = teachers.length;
+
+        // Update GL/AGL display
+        const glTeacher = settings.gl ? getTeacherById(settings.gl) : null;
+        const aglTeacher = settings.agl ? getTeacherById(settings.agl) : null;
+
+        document.getElementById('glName').innerHTML = glTeacher ?
+            glTeacher.name : '<span class="gl-agl-empty">Not Assigned</span>';
+        document.getElementById('aglName').innerHTML = aglTeacher ?
+            aglTeacher.name : '<span class="gl-agl-empty">Not Assigned</span>';
+
+        document.getElementById('glAglBtnText').textContent = (glTeacher || aglTeacher) ?
+            'Change GL & AGL' : 'Assign GL & AGL';
+
+        if (!teachers.length) {
+            container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user-slash"></i>
+                        <h4>No Teachers Yet</h4>
+                        <p>Add teachers using the form above</p>
+                    </div>
+                `;
+            return;
+        }
+
+        container.innerHTML = teachers.map(t => {
+            const isGL = settings.gl === t.id;
+            const isAGL = settings.agl === t.id;
+            const roleClass = isGL ? 'gl' : (isAGL ? 'agl' : '');
+
+            return `
+                    <div class="list-item ${roleClass}">
+                        <div class="item-info">
+                            <div class="item-avatar ${roleClass}">
+                                ${getInitials(t.name)}
+                                ${isGL ? '<span class="designation-badge">GL</span>' : ''}
+                                ${isAGL ? '<span class="designation-badge">AGL</span>' : ''}
+                            </div>
+                            <div class="item-details">
+                                <div class="item-name">${t.name}</div>
+                                <div class="item-sub">
+                                    <span class="year-badge">${t.year} Year</span>
+                                    ${isGL ? '<span class="role-badge gl">Group Leader</span>' : ''}
+                                    ${isAGL ? '<span class="role-badge agl">Asst. GL</span>' : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-icon delete" onclick="handleDeleteTeacher('${t.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+        }).join('');
+    }
+
+    function handleDeleteTeacher(id) {
+        if (confirm('Delete this teacher?')) {
+            deleteTeacher(id);
+            renderTeachers();
+            showToast('Teacher deleted');
+        }
+    }
+
+    function openGLAGLModal() {
+        const teachers = getTeachers();
+        const settings = getSettings();
+
+        const glSelect = document.getElementById('selectGL');
+        const aglSelect = document.getElementById('selectAGL');
+
+        const options = '<option value="">Select</option>' +
+            teachers.map(t => `<option value="${t.id}">${t.name} (${t.year} Year)</option>`).join('');
+
+        glSelect.innerHTML = options;
+        aglSelect.innerHTML = options;
+
+        if (settings.gl) glSelect.value = settings.gl;
+        if (settings.agl) aglSelect.value = settings.agl;
+
+        openModal('glAglModal');
+    }
+
+    function saveGLAGL() {
+        const gl = document.getElementById('selectGL').value;
+        const agl = document.getElementById('selectAGL').value;
+
+        if (gl && agl && gl === agl) {
+            showToast('GL and AGL cannot be the same person', 'error');
+            return;
+        }
+
+        saveSettings({ gl: gl || null, agl: agl || null });
+        closeModal('glAglModal');
+        renderTeachers();
+        showToast('Leadership roles updated');
+    }
+
+    function formatTeacherForPDF(teacher) {
+        const settings = getSettings();
+        let suffix = ` (${teacher.year} Yr`;
+        if (settings.gl === teacher.id) suffix += ', GL';
+        if (settings.agl === teacher.id) suffix += ', AGL';
+        suffix += ')';
+        return teacher.name + suffix;
+    }
+
+    // =====================
+    // HOLIDAYS
+    // =====================
+    function getHolidays() {
+        return load(STORAGE.HOLIDAYS) || {};
+    }
+
+    function isHoliday(date) {
+        const holidays = getHolidays();
+        return holidays[date] || null;
+    }
+
+    function openHolidayModal() {
+        document.getElementById('holidayReason').value = '';
+        openModal('holidayModal');
+    }
+
+    function saveHoliday() {
+        const date = document.getElementById('attendanceDate').value;
+        const reason = document.getElementById('holidayReason').value.trim() || 'Holiday';
+
+        const holidays = getHolidays();
+        holidays[date] = { reason, markedOn: new Date().toISOString() };
+        save(STORAGE.HOLIDAYS, holidays);
+
+        closeModal('holidayModal');
+        showToast('Day marked as holiday', 'warning');
+        loadAttendance();
+    }
+
+    function removeHoliday() {
+        const date = document.getElementById('attendanceDate').value;
+        const holidays = getHolidays();
+        delete holidays[date];
+        save(STORAGE.HOLIDAYS, holidays);
+
+        showToast('Holiday removed');
+        loadAttendance();
+    }
+
+    // =====================
+    // ATTENDANCE
+    // =====================
+    function getAttendance(date) {
+        const all = load(STORAGE.ATTENDANCE) || {};
+        return all[date] || {};
+    }
+
+    function saveAttendance(date, data) {
+        const all = load(STORAGE.ATTENDANCE) || {};
+        all[date] = { ...data, lastModified: new Date().toISOString() };
+        save(STORAGE.ATTENDANCE, all);
+    }
+
+    function loadAttendance() {
+        const dateInput = document.getElementById('attendanceDate');
+        if (!dateInput.value) {
+            dateInput.value = new Date().toISOString().split('T')[0];
+        }
+
+        const date = dateInput.value;
+        const dateObj = new Date(date);
+        const day = dateObj.getDay();
+
+        document.getElementById('displayDate').textContent = formatDate(date);
+        document.getElementById('displayDay').textContent = DAYS[day];
+
+        const sundayBanner = document.getElementById('sundayBanner');
+        const customHolidayBanner = document.getElementById('customHolidayBanner');
+        const statsGrid = document.getElementById('statsGrid');
+        const attendanceCard = document.getElementById('attendanceCard');
+        const markHolidaySection = document.getElementById('markHolidaySection');
+        const dateDisplayCard = document.getElementById('dateDisplayCard');
+        const holidayReasonDisplay = document.getElementById('holidayReasonDisplay');
+
+        const holiday = isHoliday(date);
+
+        sundayBanner.style.display = 'none';
+        customHolidayBanner.style.display = 'none';
+        statsGrid.style.display = 'grid';
+        attendanceCard.style.display = 'block';
+        markHolidaySection.style.display = 'block';
+        dateDisplayCard.classList.remove('holiday');
+        holidayReasonDisplay.style.display = 'none';
+
+        if (day === 0) {
+            sundayBanner.style.display = 'block';
+            statsGrid.style.display = 'none';
+            attendanceCard.style.display = 'none';
+            markHolidaySection.style.display = 'none';
+            dateDisplayCard.classList.add('holiday');
+            return;
+        }
+
+        if (holiday) {
+            customHolidayBanner.style.display = 'block';
+            document.getElementById('customHolidayReason').textContent = holiday.reason;
+            statsGrid.style.display = 'none';
+            attendanceCard.style.display = 'none';
+            markHolidaySection.style.display = 'none';
+            dateDisplayCard.classList.add('holiday');
+            holidayReasonDisplay.textContent = holiday.reason;
+            holidayReasonDisplay.style.display = 'inline-block';
+            return;
+        }
+
+        renderAttendance(date);
+    }
+
+    function renderAttendance(date) {
+        const teachers = getTeachers();
+        const attendance = getAttendance(date);
+        const settings = getSettings();
+        const container = document.getElementById('attendanceList');
+
+        document.getElementById('totalTeachers').textContent = teachers.length;
+
+        if (!teachers.length) {
+            container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user-plus"></i>
+                        <h4>No Teachers Added</h4>
+                        <p>Add teachers from "Teachers" tab first</p>
+                    </div>
+                `;
+            updateStats(date);
+            return;
+        }
+
+        container.innerHTML = teachers.map(t => {
+            const isPresent = attendance[t.id] !== false;
+            const isGL = settings.gl === t.id;
+            const isAGL = settings.agl === t.id;
+
+            return `
+                    <div class="list-item ${isPresent ? 'present' : 'absent'}" id="att-${t.id}">
+                        <div class="item-info">
+                            <div class="item-avatar ${isPresent ? 'present' : 'absent'}">
+                                ${getInitials(t.name)}
+                                ${isGL ? '<span class="designation-badge">GL</span>' : ''}
+                                ${isAGL ? '<span class="designation-badge">AGL</span>' : ''}
+                            </div>
+                            <div class="item-details">
+                                <div class="item-name">${t.name}</div>
+                                <div class="item-sub">
+                                    <span class="year-badge">${t.year} Year</span>
+                                    <span class="badge-custom ${isPresent ? 'present' : 'absent'}">${isPresent ? 'Present' : 'Absent'}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${isPresent ? 'checked' : ''} onchange="toggleAttendance('${t.id}', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                `;
+        }).join('');
+
+        updateStats(date);
+    }
+
+    function toggleAttendance(id, isPresent) {
+        const date = document.getElementById('attendanceDate').value;
+        const attendance = getAttendance(date);
+        attendance[id] = isPresent;
+        saveAttendance(date, attendance);
+
+        const item = document.getElementById(`att-${id}`);
+        item.className = `list-item ${isPresent ? 'present' : 'absent'}`;
+
+        const avatar = item.querySelector('.item-avatar');
+        avatar.className = `item-avatar ${isPresent ? 'present' : 'absent'}`;
+
+        const badge = item.querySelector('.badge-custom');
+        badge.className = `badge-custom ${isPresent ? 'present' : 'absent'}`;
+        badge.textContent = isPresent ? 'Present' : 'Absent';
+
+        updateStats(date);
+        showToast(isPresent ? 'Marked Present' : 'Marked Absent');
+    }
+
+    function updateStats(date) {
+        const teachers = getTeachers();
+        const attendance = getAttendance(date);
+        let present = 0, absent = 0;
+
+        teachers.forEach(t => {
+            if (attendance[t.id] !== false) present++;
+            else absent++;
+        });
+
+        document.getElementById('presentCount').textContent = present;
+        document.getElementById('absentCount').textContent = absent;
+    }
+
+    function getPresentTeachers(date) {
+        const teachers = getTeachers();
+        const attendance = getAttendance(date);
+        return teachers.filter(t => attendance[t.id] !== false);
+    }
+
+    function getAbsentTeachers(date) {
+        const teachers = getTeachers();
+        const attendance = getAttendance(date);
+        return teachers.filter(t => attendance[t.id] === false);
+    }
+
+    // =====================
+    // SPECIAL TEACHERS
+    // =====================
+    function getSpecialTeachers(date) {
+        const all = load(STORAGE.SPECIAL_TEACHERS) || {};
+        return all[date] || [];
+    }
+
+    function saveSpecialTeachers(date, teachers) {
+        const all = load(STORAGE.SPECIAL_TEACHERS) || {};
+        all[date] = teachers;
+        save(STORAGE.SPECIAL_TEACHERS, all);
+    }
+
+    function openSpecialTeachersModal() {
+        const date = document.getElementById('routineDate').value;
+        tempSpecialTeachers = [...getSpecialTeachers(date)];
+        renderSpecialTeachersList();
+        document.getElementById('specialTeacherName').value = '';
+        openModal('specialTeachersModal');
+    }
+
+    function addSpecialTeacher() {
+        const nameInput = document.getElementById('specialTeacherName');
+        const name = nameInput.value.trim();
+
+        if (!name) {
+            showToast('Please enter a name', 'error');
+            return;
+        }
+
+        const date = document.getElementById('routineDate').value;
+        const teachers = getTeachers();
+        const attendance = getAttendance(date);
+
+        // Check if name matches a trainee teacher
+        const matchingTeacher = teachers.find(t =>
+            t.name.toLowerCase() === name.toLowerCase()
+        );
+
+        if (matchingTeacher) {
+            const isPresent = attendance[matchingTeacher.id] !== false;
+            if (isPresent) {
+                showToast(`${name} is already added as a trainee teacher`, 'error');
+            } else {
+                showToast(`${name} is absent today`, 'error');
+            }
+            return;
+        }
+
+        // Check if already added as special teacher
+        if (tempSpecialTeachers.find(t => t.name.toLowerCase() === name.toLowerCase())) {
+            showToast('This teacher is already added', 'error');
+            return;
+        }
+
+        tempSpecialTeachers.push({
+            id: 'special_' + genId(),
+            name: name,
+            isSpecial: true
+        });
+
+        saveSpecialTeachers(date, tempSpecialTeachers);
+        nameInput.value = '';
+        renderSpecialTeachersList();
+        generateRoutine();
+        showToast('Special teacher added');
+    }
+
+    function removeSpecialTeacher(id) {
+        const date = document.getElementById('routineDate').value;
+        tempSpecialTeachers = tempSpecialTeachers.filter(t => t.id !== id);
+        saveSpecialTeachers(date, tempSpecialTeachers);
+        renderSpecialTeachersList();
+        generateRoutine();
+        showToast('Special teacher removed');
+    }
+
+    function clearSpecialTeachers() {
+        const date = document.getElementById('routineDate').value;
+        tempSpecialTeachers = [];
+        saveSpecialTeachers(date, []);
+        renderSpecialTeachersList();
+        generateRoutine();
+        showToast('All special teachers cleared');
+    }
+
+    function renderSpecialTeachersList() {
+        const container = document.getElementById('specialTeachersList');
+
+        if (!tempSpecialTeachers.length) {
+            container.innerHTML = '<p style="text-align: center; color: var(--gray); font-size: 0.8rem;">No special teachers added</p>';
+            return;
+        }
+
+        container.innerHTML = tempSpecialTeachers.map(t => `
+                <div class="special-teacher-item">
+                    <div class="special-teacher-info">
+                        <div class="special-teacher-avatar">${getInitials(t.name)}</div>
+                        <span class="special-teacher-name">${t.name}</span>
+                    </div>
+                    <button class="btn-icon delete" onclick="removeSpecialTeacher('${t.id}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+    }
+
+    // =====================
+    // EDITED SUBJECTS
+    // =====================
+    function getEditedSubjects(date) {
+        const all = load(STORAGE.EDITED_SUBJECTS) || {};
+        return all[date] || {};
+    }
+
+    function saveEditedSubjects() {
+        const date = document.getElementById('routineDate').value;
+        const all = load(STORAGE.EDITED_SUBJECTS) || {};
+        all[date] = { ...tempEditedSubjects };
+        save(STORAGE.EDITED_SUBJECTS, all);
+
+        closeModal('editSubjectsModal');
+        showToast('Subjects updated');
+        generateRoutine();
+    }
+
+    function resetSubjects() {
+        const date = document.getElementById('routineDate').value;
+        const all = load(STORAGE.EDITED_SUBJECTS) || {};
+        delete all[date];
+        save(STORAGE.EDITED_SUBJECTS, all);
+        tempEditedSubjects = {};
+
+        closeModal('editSubjectsModal');
+        showToast('Subjects reset');
+        generateRoutine();
+    }
+
+    function getSubjects(date) {
+        const edited = getEditedSubjects(date);
+        const subjects = {};
+
+        for (let p = 1; p <= 6; p++) {
+            subjects[p] = ORIGINAL_SUBJECTS[p].map((subj, i) => {
+                const key = `${p}-${i}`;
+                return edited[key] !== undefined ? edited[key] : subj;
+            });
+        }
+
+        return subjects;
+    }
+
+    function openEditSubjectsModal() {
+        const date = document.getElementById('routineDate').value;
+        const day = new Date(date).getDay();
+        const periods = day === 6 ? 4 : 6;
+
+        tempEditedSubjects = { ...getEditedSubjects(date) };
+
+        let html = '';
+        for (let p = 1; p <= periods; p++) {
+            html += `
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <h4><i class="fas fa-clock"></i> Period ${p}</h4>
+                        <i class="fas fa-chevron-down collapsible-icon"></i>
+                    </div>
+                    <div class="collapsible-content">
+                `;
+
+            CLASSES.forEach((cls, i) => {
+                const key = `${p}-${i}`;
+                const original = ORIGINAL_SUBJECTS[p][i];
+                const current = tempEditedSubjects[key] !== undefined ? tempEditedSubjects[key] : original;
+
+                html += `
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--gray-light);">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 0.8rem;">${cls}</div>
+                                <div style="font-size: 0.7rem; color: var(--gray);">Original: <span class="bengali">${original}</span></div>
+                            </div>
+                            <input type="text" class="form-input bengali" style="width: 45%; padding: 8px; font-size: 0.8rem;"
+                                   value="${current}" id="edit-${key}"
+                                   onchange="tempEditedSubjects['${key}'] = this.value"
+                                   ${original === 'No Class' ? 'disabled' : ''}>
+                        </div>
+                    `;
+            });
+
+            html += '</div>';
+        }
+
+        document.getElementById('editSubjectsList').innerHTML = html;
+        openModal('editSubjectsModal');
+    }
+
+    function toggleCollapsible(header) {
+        header.classList.toggle('active');
+        header.nextElementSibling.classList.toggle('active');
+    }
+
+    // =====================
+    // ROUTINE
+    // =====================
+    function generateRoutine() {
+        const dateInput = document.getElementById('routineDate');
+        if (!dateInput.value) {
+            dateInput.value = new Date().toISOString().split('T')[0];
+        }
+
+        const date = dateInput.value;
+        const dateObj = new Date(date);
+        const day = dateObj.getDay();
+
+        const holidayBanner = document.getElementById('routineHolidayBanner');
+        const saturdayNotice = document.getElementById('saturdayNotice');
+        const editedNotice = document.getElementById('editedNotice');
+        const specialTeachersNotice = document.getElementById('specialTeachersNotice');
+        const content = document.getElementById('routineContent');
+        const actions = document.getElementById('routineActions');
+        const actions2 = document.getElementById('routineActions2');
+        const messageCard = document.getElementById('messageCard');
+
+        holidayBanner.style.display = 'none';
+        saturdayNotice.style.display = 'none';
+        editedNotice.style.display = 'none';
+        specialTeachersNotice.style.display = 'none';
+        actions.style.display = 'none';
+        actions2.style.display = 'none';
+        messageCard.style.display = 'none';
+
+        if (day === 0) {
+            document.getElementById('routineHolidayTitle').textContent = 'Sunday - Weekly Holiday!';
+            document.getElementById('routineHolidayText').textContent = 'School is closed';
+            holidayBanner.style.display = 'block';
+            content.innerHTML = '';
+            return;
+        }
+
+        const holiday = isHoliday(date);
+        if (holiday) {
+            document.getElementById('routineHolidayTitle').textContent = 'Holiday';
+            document.getElementById('routineHolidayText').textContent = holiday.reason;
+            holidayBanner.style.display = 'block';
+            content.innerHTML = '';
+            return;
+        }
+
+        const periods = day === 6 ? 4 : 6;
+        if (day === 6) saturdayNotice.style.display = 'flex';
+
+        const editedSubjects = getEditedSubjects(date);
+        if (Object.keys(editedSubjects).length > 0) {
+            editedNotice.style.display = 'flex';
+        }
+
+        const specialTeachers = getSpecialTeachers(date);
+        if (specialTeachers.length > 0) {
+            specialTeachersNotice.style.display = 'flex';
+            document.getElementById('specialTeachersText').textContent =
+                `${specialTeachers.length} special teacher(s) added`;
+        }
+
+        const presentTeachers = getPresentTeachers(date);
+
+        if (!presentTeachers.length && !specialTeachers.length) {
+            content.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user-times"></i>
+                        <h4>No Teachers Available</h4>
+                        <p>Mark attendance or add special teachers</p>
+                    </div>
+                `;
+            actions2.style.display = 'grid';
+            return;
+        }
+
+        actions.style.display = 'grid';
+        actions2.style.display = 'grid';
+        messageCard.style.display = 'block';
+
+        renderRoutine(periods, presentTeachers, specialTeachers, date);
+    }
+
+    function renderRoutine(periods, presentTeachers, specialTeachers, date) {
+        const content = document.getElementById('routineContent');
+        const subjects = getSubjects(date);
+        const editedSubjects = getEditedSubjects(date);
+
+        const allTeachers = [...presentTeachers, ...specialTeachers];
+
+        // Desktop Table
+        let tableHTML = `
+                <div class="routine-table-wrapper">
+                    <div class="scroll-hint">
+                        <i class="fas fa-arrows-left-right"></i> Scroll for all classes
+                    </div>
+                    <div class="routine-container">
+                        <table class="routine-table">
+                            <thead>
+                                <tr>
+                                    <th style="vertical-align: middle;">Period</th>
+                                    ${CLASSES.map(c => `<th style="vertical-align: middle;">${c}</th>`).join('')}
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+
+        for (let p = 1; p <= periods; p++) {
+            tableHTML += `<tr><td class="period-cell">${p}</td>`;
+            CLASSES.forEach((_, i) => {
+                const subject = subjects[p][i];
+                const isNoClass = subject === 'No Class';
+                const isEdited = editedSubjects[`${p}-${i}`] !== undefined;
+
+                if (isNoClass) {
+                    tableHTML += `<td class="no-class-cell"><em>No Class</em></td>`;
+                } else {
+                    tableHTML += `
+                            <td class="subject-cell">
+                                ${isEdited ? '<span class="subject-edited-badge"><i class="fas fa-edit"></i></span>' : ''}
+                                <div class="subject-name bengali ${isEdited ? 'edited' : ''}">${subject}</div>
+                                <select class="teacher-select" id="sel-${p}-${i}" onchange="saveRoutineSelection()">
+                                    <option value="">-- Select --</option>
+                                    ${presentTeachers.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
+                                    ${specialTeachers.length ? '<option disabled>── Special ──</option>' : ''}
+                                    ${specialTeachers.map(t => `<option value="${t.id}" class="special-teacher">★ ${t.name}</option>`).join('')}
+                                </select>
+                            </td>
+                        `;
+                }
+            });
+            tableHTML += '</tr>';
+        }
+
+        tableHTML += '</tbody></table></div></div>';
+
+        // Mobile Cards
+        let cardsHTML = '<div class="routine-cards">';
+
+        for (let p = 1; p <= periods; p++) {
+            cardsHTML += `
+                    <div class="period-card">
+                        <div class="period-header">Period ${p}</div>
+                        <div class="period-body">
+                `;
+
+            CLASSES.forEach((cls, i) => {
+                const subject = subjects[p][i];
+                const isNoClass = subject === 'No Class';
+                const isEdited = editedSubjects[`${p}-${i}`] !== undefined;
+
+                if (isNoClass) {
+                    cardsHTML += `
+                            <div class="class-row">
+                                <div class="class-info">
+                                    <div class="class-name">${cls}</div>
+                                    <div class="class-subject">No Class</div>
+                                </div>
+                                <span class="no-class-text">-</span>
+                            </div>
+                        `;
+                } else {
+                    cardsHTML += `
+                            <div class="class-row">
+                                <div class="class-info">
+                                    <div class="class-name">${cls}</div>
+                                    <div class="class-subject bengali ${isEdited ? 'edited' : ''}">
+                                        ${isEdited ? '<i class="fas fa-edit" style="font-size: 0.55rem;"></i> ' : ''}${subject}
+                                    </div>
+                                </div>
+                                <div class="class-select-wrapper">
+                                    <select class="class-select" id="selm-${p}-${i}" onchange="syncSelect(${p}, ${i}, this.value)">
+                                        <option value="">-- Select --</option>
+                                        ${presentTeachers.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
+                                        ${specialTeachers.length ? '<option disabled>── Special ──</option>' : ''}
+                                        ${specialTeachers.map(t => `<option value="${t.id}">★ ${t.name}</option>`).join('')}
+                                    </select>
+                                </div>
+                            </div>
+                        `;
+                }
+            });
+
+            cardsHTML += '</div></div>';
+        }
+
+        cardsHTML += '</div>';
+
+        content.innerHTML = tableHTML + cardsHTML;
+        loadRoutineSelections(date);
+    }
+
+    function syncSelect(period, classIndex, value) {
+        const desktop = document.getElementById(`sel-${period}-${classIndex}`);
+        const mobile = document.getElementById(`selm-${period}-${classIndex}`);
+        if (desktop) desktop.value = value;
+        if (mobile) mobile.value = value;
+        saveRoutineSelection();
+    }
+
+    function saveRoutineSelection() {
+        const date = document.getElementById('routineDate').value;
+        if (!date) return;
+
+        const selections = {};
+        document.querySelectorAll('[id^="sel-"]').forEach(sel => {
+            if (!sel.id.startsWith('selm-')) {
+                selections[sel.id] = sel.value;
+            }
+        });
+
+        const all = load(STORAGE.ROUTINES) || {};
+        all[date] = { selections, savedOn: new Date().toISOString() };
+        save(STORAGE.ROUTINES, all);
+    }
+
+    function loadRoutineSelections(date) {
+        const all = load(STORAGE.ROUTINES) || {};
+        const data = all[date] || {};
+        const selections = data.selections || {};
+
+        Object.keys(selections).forEach(id => {
+            const desktop = document.getElementById(id);
+            const mobile = document.getElementById(id.replace('sel-', 'selm-'));
+            if (desktop) desktop.value = selections[id];
+            if (mobile) mobile.value = selections[id];
+        });
+    }
+
+    // =====================
+    // PDF GENERATION
+    // =====================
+    function downloadPDF() {
+        const date = document.getElementById('routineDate').value;
+        if (!date) {
+            showToast('Please select a date', 'error');
+            return;
+        }
+
+        const day = new Date(date).getDay();
+
+        if (day === 0 || isHoliday(date)) {
+            showToast('Cannot generate PDF for holidays', 'error');
+            return;
+        }
+
+        const periods = day === 6 ? 4 : 6;
+        const presentTeachers = getPresentTeachers(date);
+        const absentTeachers = getAbsentTeachers(date);
+        const specialTeachers = getSpecialTeachers(date);
+        const subjects = getSubjects(date);
+        const additionalMessage = document.getElementById('pdfMessage').value.trim();
+
+        if (!presentTeachers.length && !specialTeachers.length) {
+            showToast('No teachers available', 'error');
+            return;
+        }
+
+        const pdfContent = document.getElementById('pdf-content');
+        document.getElementById('pdfDate').innerHTML = `
+                <strong>Date:</strong> ${formatDate(date)} (${DAYS[day]})
+                ${day === 6 ? ' <span style="color: #f59e0b;">- Saturday (4 Periods)</span>' : ''}
+            `;
+
+        const msgSection = document.getElementById('pdfMessageSection');
+        if (additionalMessage) {
+            msgSection.style.display = 'block';
+            document.getElementById('pdfMessageText').textContent = additionalMessage;
+        } else {
+            msgSection.style.display = 'none';
+        }
+
+        let tableHTML = `
+                <table style="width: 100%; border-collapse: collapse; font-size: 9px;">
+                    <thead>
+                        <tr style="background: linear-gradient(135deg, #4361ee, #4895ef); color: white;">
+                            <th style="padding: 8px; border: 1px solid #ddd; vertical-align: middle;">Period</th>
+                            ${CLASSES.map(c => `<th style="padding: 8px; border: 1px solid #ddd; vertical-align: middle;">${c}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+        const allTeachers = [...presentTeachers, ...specialTeachers];
+
+        for (let p = 1; p <= periods; p++) {
+            tableHTML += `<tr>
+                    <td style="padding: 6px; border: 1px solid #ddd; background: #4361ee; color: white; text-align: center; vertical-align: middle; font-weight: bold;">${p}</td>
+                `;
+
+            CLASSES.forEach((_, i) => {
+                const subject = subjects[p][i];
+                const isNoClass = subject === 'No Class';
+                const select = document.getElementById(`sel-${p}-${i}`);
+                const teacherId = select ? select.value : '';
+                const teacher = allTeachers.find(t => t.id === teacherId);
+                const isSpecial = teacher?.isSpecial;
+
+                if (isNoClass) {
+                    tableHTML += `<td style="padding: 6px; border: 1px solid #ddd; text-align: center; vertical-align: middle; background: #f5f5f5; color: #999; font-style: italic;">No Class</td>`;
+                } else {
+                    tableHTML += `
+                            <td style="padding: 6px; border: 1px solid #ddd; text-align: center; vertical-align: middle;">
+                                <strong style="font-family: 'Noto Sans Bengali', sans-serif;">${subject}</strong><br>
+                                <span style="color: ${isSpecial ? '#c2410c' : '#4361ee'}; font-size: 8px;">${teacher ? (isSpecial ? '★ ' : '') + teacher.name : '---'}</span>
+                            </td>
+                        `;
+                }
+            });
+
+            tableHTML += '</tr>';
+        }
+
+        tableHTML += '</tbody></table>';
+        document.getElementById('pdfTableContent').innerHTML = tableHTML;
+
+        // Format teacher lists with details
+        document.getElementById('pdfPresentTeachers').textContent =
+            presentTeachers.map(t => formatTeacherForPDF(t)).join(', ') || 'None';
+        document.getElementById('pdfAbsentTeachers').textContent =
+            absentTeachers.map(t => formatTeacherForPDF(t)).join(', ') || 'None';
+
+        // Special teachers section
+        const specialSection = document.getElementById('pdfSpecialTeachersSection');
+        if (specialTeachers.length) {
+            specialSection.style.display = 'block';
+            document.getElementById('pdfSpecialTeachers').textContent =
+                specialTeachers.map(t => t.name + ' (School Staff)').join(', ');
+        } else {
+            specialSection.style.display = 'none';
+        }
+
+        document.getElementById('pdfGeneratedDate').textContent = new Date().toLocaleString();
+
+        pdfContent.style.display = 'block';
+
+        const opt = {
+            margin: [8, 8, 8, 8],
+            filename: `Routine_${date}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+        };
+
+        showToast('Generating PDF...', 'warning');
+
+        html2pdf().set(opt).from(pdfContent).save().then(() => {
+            pdfContent.style.display = 'none';
+            showToast('PDF downloaded!');
+        }).catch(err => {
+            pdfContent.style.display = 'none';
+            showToast('Error generating PDF', 'error');
+        });
+    }
+
+    // =====================
+    // HISTORY
+    // =====================
+    function filterHistory(filter, btn) {
+        currentFilter = filter;
+        document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        loadHistory();
+    }
+
+    function loadHistory() {
+        const container = document.getElementById('historyList');
+        const attendance = load(STORAGE.ATTENDANCE) || {};
+        const routines = load(STORAGE.ROUTINES) || {};
+        const holidays = getHolidays();
+
+        let items = [];
+
+        if (currentFilter === 'all' || currentFilter === 'attendance') {
+            Object.keys(attendance).forEach(date => {
+                const teachers = getTeachers();
+                const att = attendance[date];
+                let present = 0, absent = 0;
+
+                teachers.forEach(t => {
+                    if (att[t.id] !== false) present++;
+                    else absent++;
+                });
+
+                items.push({ type: 'attendance', date, present, absent });
+            });
+        }
+
+        if (currentFilter === 'all' || currentFilter === 'routine') {
+            Object.keys(routines).forEach(date => {
+                if (!items.find(i => i.date === date && i.type === 'routine')) {
+                    items.push({ type: 'routine', date });
+                }
+            });
+        }
+
+        if (currentFilter === 'all' || currentFilter === 'holiday') {
+            Object.keys(holidays).forEach(date => {
+                items.push({ type: 'holiday', date, reason: holidays[date].reason });
+            });
+        }
+
+        items.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const seen = new Set();
+        items = items.filter(item => {
+            const key = `${item.date}-${item.type}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+
+        if (!items.length) {
+            container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h4>No History Yet</h4>
+                        <p>Records will appear here</p>
+                    </div>
+                `;
+            return;
+        }
+
+        container.innerHTML = items.map(item => {
+            const dayName = DAYS[new Date(item.date).getDay()];
+
+            if (item.type === 'holiday') {
+                return `
+                        <div class="history-item" onclick="viewHistoryDetail('holiday', '${item.date}')">
+                            <div class="history-header">
+                                <div>
+                                    <div class="history-date">${formatShortDate(item.date)}</div>
+                                    <div class="history-day">${dayName}</div>
+                                </div>
+                                <span class="badge-custom holiday">Holiday</span>
+                            </div>
+                            <div class="history-stats">
+                                <span class="history-stat holiday">
+                                    <i class="fas fa-calendar-times"></i> ${item.reason}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+            } else if (item.type === 'attendance') {
+                return `
+                        <div class="history-item" onclick="viewHistoryDetail('attendance', '${item.date}')">
+                            <div class="history-header">
+                                <div>
+                                    <div class="history-date">${formatShortDate(item.date)}</div>
+                                    <div class="history-day">${dayName}</div>
+                                </div>
+                                <span class="badge-custom present">Attendance</span>
+                            </div>
+                            <div class="history-stats">
+                                <span class="history-stat present"><i class="fas fa-user-check"></i> ${item.present}</span>
+                                <span class="history-stat absent"><i class="fas fa-user-times"></i> ${item.absent}</span>
+                            </div>
+                        </div>
+                    `;
+            } else {
+                return `
+                        <div class="history-item" onclick="viewHistoryDetail('routine', '${item.date}')">
+                            <div class="history-header">
+                                <div>
+                                    <div class="history-date">${formatShortDate(item.date)}</div>
+                                    <div class="history-day">${dayName}</div>
+                                </div>
+                                <span class="badge-custom" style="background: #dbeafe; color: #1e40af;">Routine</span>
+                            </div>
+                            <div class="history-stats">
+                                <span style="color: var(--gray); font-size: 0.7rem;">
+                                    <i class="fas fa-table"></i> Routine saved
+                                </span>
+                            </div>
+                        </div>
+                    `;
+            }
+        }).join('');
+    }
+
+    function viewHistoryDetail(type, date) {
+        const title = document.getElementById('historyDetailTitle');
+        const content = document.getElementById('historyDetailContent');
+        const dayName = DAYS[new Date(date).getDay()];
+
+        title.textContent = `${formatShortDate(date)} (${dayName})`;
+
+        if (type === 'holiday') {
+            const holidays = getHolidays();
+            content.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--warning), #fbbf24); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; color: white; font-size: 1.3rem;">
+                            <i class="fas fa-calendar-times"></i>
+                        </div>
+                        <h4 style="margin-bottom: 6px;">Holiday</h4>
+                        <p style="color: var(--gray);">${holidays[date].reason}</p>
+                    </div>
+                `;
+        } else if (type === 'attendance') {
+            const teachers = getTeachers();
+            const attendance = getAttendance(date);
+            const settings = getSettings();
+
+            let html = '<div>';
+            teachers.forEach(t => {
+                const isPresent = attendance[t.id] !== false;
+                const isGL = settings.gl === t.id;
+                const isAGL = settings.agl === t.id;
+
+                html += `
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--gray-light);">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background: ${isPresent ? 'var(--success)' : 'var(--danger)'}; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; font-weight: 600;">${getInitials(t.name)}</div>
+                                <div>
+                                    <span style="font-weight: 500; font-size: 0.85rem;">${t.name}</span>
+                                    <div style="font-size: 0.65rem; color: var(--gray);">
+                                        ${t.year} Year ${isGL ? '• GL' : ''} ${isAGL ? '• AGL' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="badge-custom ${isPresent ? 'present' : 'absent'}">${isPresent ? 'Present' : 'Absent'}</span>
+                        </div>
+                    `;
+            });
+            html += '</div>';
+            content.innerHTML = html;
+        } else {
+            content.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; color: white; font-size: 1.3rem;">
+                            <i class="fas fa-table"></i>
+                        </div>
+                        <h4 style="margin-bottom: 6px;">Routine Saved</h4>
+                        <p style="color: var(--gray); font-size: 0.8rem; margin-bottom: 12px;">View this routine in the Routine tab</p>
+                        <button class="btn-primary-custom btn-sm" onclick="loadRoutineFromHistory('${date}')">
+                            <i class="fas fa-eye"></i> View Routine
+                        </button>
+                    </div>
+                `;
+        }
+
+        openModal('historyDetailModal');
+    }
+
+    function loadRoutineFromHistory(date) {
+        closeModal('historyDetailModal');
+        document.getElementById('routineDate').value = date;
+        showTab('routine');
+    }
+
+    // =====================
+    // EXPORT / IMPORT
+    // =====================
+    function openExportModal() {
+        document.getElementById('exportType').value = 'all';
+        updateExportOptions();
+        openModal('exportModal');
+    }
+
+    function updateExportOptions() {
+        const type = document.getElementById('exportType').value;
+        document.getElementById('exportDateOptions').style.display = type === 'date' ? 'block' : 'none';
+        document.getElementById('exportRangeOptions').style.display = type === 'range' ? 'block' : 'none';
+    }
+
+    function exportData() {
+        const type = document.getElementById('exportType').value;
+        let exportObj = {
+            exportedOn: new Date().toISOString(),
+            version: '1.0',
+            type: type
+        };
+
+        if (type === 'all') {
+            exportObj.data = {
+                teachers: load(STORAGE.TEACHERS),
+                attendance: load(STORAGE.ATTENDANCE),
+                routines: load(STORAGE.ROUTINES),
+                holidays: load(STORAGE.HOLIDAYS),
+                editedSubjects: load(STORAGE.EDITED_SUBJECTS),
+                specialTeachers: load(STORAGE.SPECIAL_TEACHERS),
+                settings: load(STORAGE.SETTINGS)
+            };
+        } else if (type === 'date') {
+            const date = document.getElementById('exportDate').value;
+            if (!date) {
+                showToast('Please select a date', 'error');
+                return;
+            }
+            exportObj.dates = [date];
+            exportObj.data = getDataForDates([date]);
+        } else if (type === 'range') {
+            const from = document.getElementById('exportFrom').value;
+            const to = document.getElementById('exportTo').value;
+            if (!from || !to) {
+                showToast('Please select date range', 'error');
+                return;
+            }
+            const dates = getDatesBetween(from, to);
+            exportObj.dates = dates;
+            exportObj.data = getDataForDates(dates);
+        }
+
+        const jsonStr = JSON.stringify(exportObj, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `RPS_Export_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        closeModal('exportModal');
+        showToast('Data exported!');
+    }
+
+    function getDatesBetween(start, end) {
+        const dates = [];
+        let current = new Date(start);
+        const endDate = new Date(end);
+
+        while (current <= endDate) {
+            dates.push(current.toISOString().split('T')[0]);
+            current.setDate(current.getDate() + 1);
+        }
+
+        return dates;
+    }
+
+    function getDataForDates(dates) {
+        const attendance = load(STORAGE.ATTENDANCE) || {};
+        const routines = load(STORAGE.ROUTINES) || {};
+        const holidays = load(STORAGE.HOLIDAYS) || {};
+        const editedSubjects = load(STORAGE.EDITED_SUBJECTS) || {};
+        const specialTeachers = load(STORAGE.SPECIAL_TEACHERS) || {};
+
+        const filteredData = {
+            teachers: load(STORAGE.TEACHERS),
+            settings: load(STORAGE.SETTINGS),
+            attendance: {},
+            routines: {},
+            holidays: {},
+            editedSubjects: {},
+            specialTeachers: {}
+        };
+
+        dates.forEach(date => {
+            if (attendance[date]) filteredData.attendance[date] = attendance[date];
+            if (routines[date]) filteredData.routines[date] = routines[date];
+            if (holidays[date]) filteredData.holidays[date] = holidays[date];
+            if (editedSubjects[date]) filteredData.editedSubjects[date] = editedSubjects[date];
+            if (specialTeachers[date]) filteredData.specialTeachers[date] = specialTeachers[date];
+        });
+
+        return filteredData;
+    }
+
+    function openImportModal() {
+        document.getElementById('importData').value = '';
+        document.getElementById('importFile').value = '';
+        openModal('importModal');
+    }
+
+    function handleFileImport(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('importData').value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+    }
+
+    function importData() {
+        const jsonStr = document.getElementById('importData').value.trim();
+
+        if (!jsonStr) {
+            showToast('Please paste or upload data', 'error');
+            return;
+        }
+
+        try {
+            const importObj = JSON.parse(jsonStr);
+
+            if (!importObj.data) {
+                showToast('Invalid data format', 'error');
+                return;
+            }
+
+            const data = importObj.data;
+
+            // Merge teachers (avoid duplicates by name)
+            if (data.teachers) {
+                const existingTeachers = getTeachers();
+                const existingNames = existingTeachers.map(t => t.name.toLowerCase());
+
+                data.teachers.forEach(t => {
+                    if (!existingNames.includes(t.name.toLowerCase())) {
+                        existingTeachers.push(t);
+                    }
+                });
+                save(STORAGE.TEACHERS, existingTeachers);
+            }
+
+            // Merge settings
+            if (data.settings) {
+                saveSettings(data.settings);
+            }
+
+            // Merge date-based data
+            const mergeData = (key, newData) => {
+                if (!newData) return;
+                const existing = load(key) || {};
+                Object.keys(newData).forEach(date => {
+                    existing[date] = newData[date];
+                });
+                save(key, existing);
+            };
+
+            mergeData(STORAGE.ATTENDANCE, data.attendance);
+            mergeData(STORAGE.ROUTINES, data.routines);
+            mergeData(STORAGE.HOLIDAYS, data.holidays);
+            mergeData(STORAGE.EDITED_SUBJECTS, data.editedSubjects);
+            mergeData(STORAGE.SPECIAL_TEACHERS, data.specialTeachers);
+
+            closeModal('importModal');
+            showToast('Data imported successfully!');
+            loadHistory();
+            renderTeachers();
+
+        } catch (e) {
+            showToast('Invalid JSON data', 'error');
+            console.error(e);
+        }
+    }
+
+    // =====================
+    // EVENT LISTENERS
+    // =====================
+    document.getElementById('addTeacherForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('teacherName').value.trim();
+        const year = document.getElementById('teacherYear').value;
+
+        if (!name || !year) {
+            showToast('Please fill all fields', 'error');
+            return;
+        }
+
+        addTeacher(name, year);
+        document.getElementById('teacherName').value = '';
+        document.getElementById('teacherYear').value = '';
+        renderTeachers();
+        showToast('Teacher added!');
+    });
+
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+    });
+
+    // =====================
+    // INITIALIZATION
+    // =====================
+    function init() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('attendanceDate').value = today;
+        document.getElementById('routineDate').value = today;
+        document.getElementById('exportDate').value = today;
+        document.getElementById('exportFrom').value = today;
+        document.getElementById('exportTo').value = today;
+
+        loadAttendance();
+        renderTeachers();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    // Prevent zoom on double tap
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) e.preventDefault();
+        lastTouchEnd = now;
+    }, false);
+</script>
+</body>
+</html>
